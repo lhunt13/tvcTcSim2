@@ -1,0 +1,14 @@
+#!/bin/bash
+#$ -l mem_free=1G
+#$ -l h_vmem=1G
+#$ -l h_rt=24:00:00
+#$ -cwd
+#$ -j y
+#$ -R y
+#$ -t 1-1000
+
+mkdir -p results
+output_file="results/run-$SGE_TASK_ID.rds"
+if [ ! -f $output_file ]; then
+	Rscript analyzeDataParal.R $SGE_TASK_ID 1000 180 365 4000 30 15 100 1000
+fi;

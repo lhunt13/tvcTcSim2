@@ -1,0 +1,15 @@
+#!/bin/bash
+#$ -l mem_free=1G
+#$ -l h_vmem=1G
+#$ -l h_rt=24:00:00
+#$ -cwd
+#$ -j y
+#$ -R y
+#$ -t 1-1000
+
+mkdir -p truth
+output_file="truth/run-$SGE_TASK_ID.rds"
+if [ ! -f $output_file ]; then
+	Rscript getTruthParal.R $SGE_TASK_ID 1000 30 15 180 1000
+fi;
+
