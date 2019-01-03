@@ -4,7 +4,7 @@
 fit_models_noG <- function(DAT){
   S <- glm(S ~ I(V=="none") + I(V=="other") + cc + U + day,
            data=DAT, family=binomial(logit))
-  return(S=S)
+  return(list(S=S))
 }
 
 # compute the g-computation integral numerically
