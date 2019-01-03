@@ -4,6 +4,9 @@ library(data.table)
 source('parVals.R')
 source('simObs.R')
 source('analyze.R')
+source('analyze_noU.R')
+source('analyze_noG.R')
+source('analyze_noUG.R')
 
 # set seed for run SGE_TASK_ID
 # grab value of SGE_TASK_ID 
@@ -30,12 +33,18 @@ set.seed(boot.seed)
 data <- simObs(N=n,FOLLOWUP=followup)
 
 # perform analysis
-rmdiff <- analyze(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+rmdiff_UG <- analyze(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+rmdiff_G  <- analyze_noU(DATA=data,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+rmdiff_U  <- analyze_noG(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+rmdiff    <- analyze_noUG()
 
 # perform bootstrap
-ci <- bootstrap(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_UG <- bootstrap(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_G  <- bootstrap_noU(DATA=data,R=r,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_U  <- bootstrap_noG(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci    <- bootstrap_noUG()
 
-results <- c(rmdiff,ci)
+results <- c(rmdiff_UG,ci_UG,rmdiff_G,ci_G,rmdiff_U,ci_U,rmdiff,ci)
 
 # store results
 # save file in "truth" directory with file name "run-<boot.index>.rds"
