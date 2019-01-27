@@ -88,7 +88,7 @@ simObs <- function(N,FOLLOWUP){
   
   # sample baseline variables (U, L) from empirical distributions
   U <- predict(ssU, runif(N))$y
-  L1 <- rbinom(N, 1, pL1)
+  L1 <- ifelse(U < u_star, rbinom(N, 1, pL1b), rbinom(N,1,pL1g))
   
   # create each patients timeline
   for(i in 1:N){

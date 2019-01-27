@@ -28,13 +28,14 @@ getTruth <- function(N,DAYSUPP,PRICE,FOLLOWUP){
   generic <- data.frame(id=NA,day=NA,S=NA)
   
   # sample baseline variable L from empirical distributions
-  L1 <- rbinom(N, 1, pL1)
+  L1b <- rbinom(N, 1, pL1b)
+  L1g <- rbinom(N, 1, pL1g)
   
   # create adherant patients timeline
   for(i in 1:N){
-    brand <- rbind(brand,adherant_patient(id=i,L1=L1[i],U=u_star,Era=0,
+    brand <- rbind(brand,adherant_patient(id=i,L1=L1b[i],U=u_star,Era=0,
                                             DAYSUPP=DAYSUPP,PRICE=PRICE,FOLLOWUP=FOLLOWUP))
-    generic <- rbind(generic,adherant_patient(id=i,L1=L1[i],U=u_star,Era=1,
+    generic <- rbind(generic,adherant_patient(id=i,L1=L1g[i],U=u_star,Era=1,
                                               DAYSUPP=DAYSUPP,PRICE=PRICE,FOLLOWUP=FOLLOWUP))
   }
 
