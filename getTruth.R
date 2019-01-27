@@ -46,10 +46,12 @@ getTruth <- function(N,DAYSUPP,PRICE,FOLLOWUP){
   
   # sum_t {P(S(b) > t) - P(S(g) > t)} t going from 0 to 180
   # P(S(z) > 0) = 1, always
+  brand_curve   <- c(brand[,.(.N/N),.(day)]$V1,   brand[day==FOLLOWUP & S==0,.(.N/N)]$V1)
+  generic_curve <- c(generic[,.(.N/N),.(day)]$V1, generic[day==FOLLOWUP & S==0,.(.N/N)]$V1)
+  rmdiff <- sum(brand_curve - generic_curve)
   
-  truth <- sum(c(brand[,.(.N/N),.(day)]$V1, brand[day==FOLLOWUP & S==0,.(.N/N)]$V1) - 
-               c(generic[,.(.N/N),.(day)]$V1, generic[day==FOLLOWUP & S==0,.(.N/N)]$V1))
-  
-  return(truth)
+  return(list(rmdiff=rmdiff, 
+              brand=brand_curve, 
+              generic=generic_curve))
 }
 

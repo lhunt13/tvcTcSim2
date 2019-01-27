@@ -46,7 +46,9 @@ analyze_noUG <- function(DATA,NUMSIM,DAYSUPP,PRICE,FOLLOWUP){
   # get restricted mean difference
   rmdiff <- sum(brand - generic)
   
-  return(rmdiff)
+  return(list(rmdiff=rmdiff, 
+              brand=brand, 
+              generic=generic))
 }
 
 # compute a 95% CI using bootstrap
@@ -56,7 +58,7 @@ bootstrap_noUG <- function(DATA,R,NUMSIM,DAYSUPP,PRICE,FOLLOWUP){
   for(r in 1:R){
     ids_resampled <- sample(unique(DATA$id), length(unique(DATA$id)), replace = TRUE)
     data_resampled <- DATA[J(ids_resampled), allow.cartesian=TRUE]
-    boots[r] <- analyze_noUG(DATA = data_resampled,NUMSIM,DAYSUPP,PRICE,FOLLOWUP)
+    boots[r] <- analyze_noUG(DATA = data_resampled,NUMSIM,DAYSUPP,PRICE,FOLLOWUP)$rmdiff
   }
   return(quantile(boots,probs=c(.025,.975)))
 }

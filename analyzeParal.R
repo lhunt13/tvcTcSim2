@@ -33,18 +33,21 @@ set.seed(boot.seed)
 data <- simObs(N=n,FOLLOWUP=followup)
 
 # perform analysis
-rmdiff_UG <- analyze(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-rmdiff_G  <- analyze_noU(DATA=data,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-rmdiff_U  <- analyze_noG(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-rmdiff    <- analyze_noUG(DATA=data,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+both <- analyze(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+noU  <- analyze_noU(DATA=data,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+noG  <- analyze_noG(DATA=data,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+noUG <- analyze_noUG(DATA=data,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
 
 # perform bootstrap
-ci_UG <- bootstrap(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-ci_G  <- bootstrap_noU(DATA=data,R=r,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-ci_U  <- bootstrap_noG(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-ci    <- bootstrap_noUG(DATA=data,R=r,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_both <- bootstrap(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_noU  <- bootstrap_noU(DATA=data,R=r,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_noG  <- bootstrap_noG(DATA=data,R=r,BAND=band,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
+ci_noUG <- bootstrap_noUG(DATA=data,R=r,NUMSIM=numsim,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
 
-results <- c(rmdiff_UG,ci_UG,rmdiff_G,ci_G,rmdiff_U,ci_U,rmdiff,ci)
+results <- c(both$rmdiff,ci_both,
+             noU$rmdiff,ci_noU,
+             noG$rmdiff,ci_noG,
+             noUG$rmdiff,ci_noUG)
 
 # store results
 # save file in "truth" directory with file name "run-<boot.index>.rds"
