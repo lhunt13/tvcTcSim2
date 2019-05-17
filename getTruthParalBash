@@ -13,6 +13,6 @@ mkdir -p generic
 
 output_file="truth/run-$SGE_TASK_ID.rds"
 if [ ! -f $output_file ]; then
-	Rscript getTruthParal.R $SGE_TASK_ID 1000 30 15 180 1000
+	Rscript getTruthParal.R $SGE_TASK_ID 1000 30 15 270 1000
 fi;
 

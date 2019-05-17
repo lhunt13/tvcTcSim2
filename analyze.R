@@ -2,10 +2,10 @@
 
 # fit the models for the nuisance parameters
 fit_models <- function(DAT){
-  L <- glm(L ~ I(V_lag=="none") + I(V_lag=="other") + cc_lag + L_lag,
+  L <- glm(L ~ I(A_lag==1) + cc_lag + L_lag,
              data=DAT, family=binomial(logit))
   
-  S <- glm(S ~ I(V=="none") + I(V=="other") + cc + L + U + day,
+  S <- glm(S ~ I(A==1) + cc + L + U + day,
            data=DAT, family=binomial(logit))
   return(list(L=L,S=S))
 }
@@ -20,16 +20,16 @@ g_comp <- function(BSLN,MODELS,DAYSUPP,PRICE,FOLLOWUP){
   L[,1] <- BSLN[,L]
   
   # baseline survival
-  X <- cbind(rep(1,n),rep(0,n),rep(0,n),rep(PRICE,n),L[,1],rep(u_star,n),rep(1,n))
+  X <- cbind(rep(1,n),rep(1,n),rep(PRICE,n),L[,1],rep(u_star,n),rep(1,n))
   S[,1] <- rbinom(n,1,expit(X %*% MODELS[["S"]]$coefficients))
   
   for(t in 2:FOLLOWUP){
     ###### L
-    X <- cbind(rep(1,n),rep(0,n),rep(0,n),rep(ceiling((t-1)/DAYSUPP)*PRICE,n),L[,t-1])
+    X <- cbind(rep(1,n),rep(1,n),rep(ceiling((t-1)/DAYSUPP)*PRICE,n),L[,t-1])
     L[,t] <- rbinom(n,1,expit(X %*% MODELS[["L"]]$coefficients))
     
     ###### S
-    X <- cbind(rep(1,n),rep(0,n),rep(0,n),rep(ceiling(t/DAYSUPP)*PRICE,n),
+    X <- cbind(rep(1,n),rep(1,n),rep(ceiling(t/DAYSUPP)*PRICE,n),
                L[,t],rep(u_star,n),rep(t,n))
     S[,t] <- ifelse(S[,t-1]==1,1,
                     rbinom(n,1,expit(X %*% MODELS[["S"]]$coefficients)))

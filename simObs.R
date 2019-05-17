@@ -56,11 +56,12 @@ simS <- function(V,cc,L,U,t,era){
 create_patient <- function(id,L1,U,FOLLOWUP){
   
   Era <- (U >= u_star)
-  L <- V <- D <- C <- cc <- S <- numeric(0)
+  L <- V <- D <- C <- cc <- S  <- A <- numeric(0)
   
   # day 1
   L[1]  <- L1
   V[1]  <- "adhere"
+  A[1]  <- 1 # variable to use when fitting models in analysis
   D[1]  <- simD(t=1,D=0,V=V[1],era=Era)
   C[1]  <- simC(t=1,D=D[1],V=V[1],era=Era)
   cc[1] <- (exp(2*C) - 1)/(2*exp(C))
@@ -70,6 +71,7 @@ create_patient <- function(id,L1,U,FOLLOWUP){
   repeat{
     L[t]  <- simL(V_lag=V[t-1],cc_lag=cc[t-1],L_lag=L[t-1],era=Era)
     V[t]  <- simV(t=t,D=D,V=V[t-1],L=L[t],era=Era)
+    A[t]  <- ifelse(V[t]=="adhere",1,0)
     D[t]  <- simD(t=t,D=D[1:(t-1)],V=V[t],era=Era)
     C[t]  <- simC(t=t,D=D[1:(t-1)],V=V[t],era=Era)
     
@@ -80,11 +82,11 @@ create_patient <- function(id,L1,U,FOLLOWUP){
     else{t <- t+1}
 
   }
-  return(data.frame(id=id,day=1:t,U=U,V=V,D=D,C=C,cc=cc,L=L,S=S))
+  return(data.frame(id=id,day=1:t,U=U,V=V,A=A,D=D,C=C,cc=cc,L=L,S=S))
 }
 
 simObs <- function(N,FOLLOWUP){
-  data <- data.frame(id=NA, day=NA, U=NA, V=NA, D=NA, C=NA, cc=NA, L=NA, S=NA)
+  data <- data.frame(id=NA, day=NA, U=NA, V=NA, A=NA, D=NA, C=NA, cc=NA, L=NA, S=NA)
   
   # sample baseline variables (U, L) from empirical distributions
   U <- predict(ssU, runif(N))$y
@@ -96,8 +98,9 @@ simObs <- function(N,FOLLOWUP){
   }
   
   setDT(data)
-  lagcols <- c("V","cc","L")
+  lagcols <- c("A","cc","L")
   data[,(paste0(lagcols,"_lag")) := shift(.SD),id,.SDcols=lagcols]
+  
   
   return(data[-1])
 }

@@ -2,7 +2,7 @@
 
 # fit the models for the nuisance parameters
 fit_models_noG <- function(DAT){
-  S <- glm(S ~ I(V=="none") + I(V=="other") + cc + U + day,
+  S <- glm(S ~ I(A==1) + cc + U + day,
            data=DAT, family=binomial(logit))
   return(list(S=S))
 }
@@ -14,12 +14,12 @@ g_comp_noG <- function(BSLN,MODELS,DAYSUPP,PRICE,FOLLOWUP){
   S <- matrix(NA,nrow=n,ncol=FOLLOWUP)
   
   # baseline survival
-  X <- cbind(rep(1,n),rep(0,n),rep(0,n),rep(PRICE,n),rep(u_star,n),rep(1,n))
+  X <- cbind(rep(1,n),rep(1,n),rep(PRICE,n),rep(u_star,n),rep(1,n))
   S[,1] <- rbinom(n,1,expit(X %*% MODELS[["S"]]$coefficients))
   
   for(t in 2:FOLLOWUP){
     ###### S
-    X <- cbind(rep(1,n),rep(0,n),rep(0,n),rep(ceiling(t/DAYSUPP)*PRICE,n),
+    X <- cbind(rep(1,n),rep(1,n),rep(ceiling(t/DAYSUPP)*PRICE,n),
                rep(u_star,n),rep(t,n))
     S[,t] <- ifelse(S[,t-1]==1,1,
                     rbinom(n,1,expit(X %*% MODELS[["S"]]$coefficients)))
