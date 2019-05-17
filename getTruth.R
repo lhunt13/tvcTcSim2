@@ -50,6 +50,6 @@ getTruth <- function(N,DAYSUPP,PRICE,FOLLOWUP){
   generic_curve <- c(generic[,.(.N/N),.(day)]$V1, generic[day==FOLLOWUP & S==0,.(.N/N)]$V1)
   rmdiff <- sum(brand_curve - generic_curve)
   
-  return(list(rmdiff))
+  return(rmdiff)
 }
 

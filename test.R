@@ -6,8 +6,8 @@ source('analyze.R')
 
 price = 20
 daySupp = 30
-followUp = 270
-getTruth(N=1000,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followUp)
+followUp = 50
+truth <- getTruth(N=1000,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followUp)
 
 data <- simObs(N=1000,FOLLOWUP=followUp)
 analyze(DATA=data,BAND=365,NUMSIM=4000,
