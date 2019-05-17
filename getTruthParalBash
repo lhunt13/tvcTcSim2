@@ -1,6 +1,6 @@
 #!/bin/bash
-#$ -l mem_free=2G
-#$ -l h_vmem=2G
+#$ -l mem_free=5G
+#$ -l h_vmem=5G
 #$ -l h_rt=24:00:00
 #$ -cwd
 #$ -j y
