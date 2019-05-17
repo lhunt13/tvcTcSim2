@@ -26,19 +26,13 @@ set.seed(123)
 boot.seed <- sample(1e6, size = tval, replace = F)[boot.index]
 set.seed(boot.seed)
 truth   <- getTruth(N=n,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followup)
-rmdiff  <- truth$rmdiff
-brand   <- truth$brand
-generic <- truth$generic
+
 
 # store results
 # save file in "truth" directory with file name "run-<boot.index>.rds"
-rmdiff.file  <- file.path("rmdiff",  paste0("run-", boot.index, ".rds"))
-brand.file   <- file.path("brand",   paste0("run-", boot.index, ".rds"))
-generic.file <- file.path("generic", paste0("run-", boot.index, ".rds"))
+truth.file  <- file.path("truth",  paste0("run-", boot.index, ".rds"))
+saveRDS(truth, truth.file)
 
-saveRDS(rmdiff, rmdiff.file)
-saveRDS(brand, brand.file)
-saveRDS(generic, generic.file)
 
 # quit R and don't save workspace
 quit('no')
