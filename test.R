@@ -4,7 +4,7 @@ source('simObs.R')
 source('getTruth.R')
 source('analyze.R')
 
-price = 20
+price = 15
 daySupp = 30
 followUp = 50
 truth <- getTruth(N=1000,DAYSUPP=daySupp,PRICE=price,FOLLOWUP=followUp)
