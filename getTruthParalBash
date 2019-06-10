@@ -1,6 +1,6 @@
 #!/bin/bash
-#$ -l mem_free=5G
-#$ -l h_vmem=5G
+#$ -l mem_free=20G
+#$ -l h_vmem=20G
 #$ -l h_rt=24:00:00
 #$ -cwd
 #$ -j y
@@ -8,6 +8,8 @@
 #$ -t 1-1000
 
 mkdir -p truth
-Rscript getTruthParal.R $SGE_TASK_ID 1000 30 15 270 1000
+if [ ! -f "/truth/run-$SGE_TASK_ID" ]; then
+  Rscript getTruthParal.R $SGE_TASK_ID 1000 30 15 180 1000
+fi
 
 

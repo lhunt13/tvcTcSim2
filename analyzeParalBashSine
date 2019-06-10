@@ -1,0 +1,13 @@
+#!/bin/bash
+#$ -l mem_free=60G
+#$ -l h_vmem=60G
+#$ -l h_rt=24:00:00
+#$ -cwd
+#$ -j y
+#$ -R y
+#$ -t 1-1000
+
+mkdir -p results_sine
+if [ ! -f "/results_sine/run-$SGE_TASK_ID" ]; then
+  Rscript analyzeParalSine.R $SGE_TASK_ID 1000 180 365 4000 30 15 100 1000
+fi

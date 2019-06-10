@@ -1,6 +1,6 @@
 #!/bin/bash
-#$ -l mem_free=6G
-#$ -l h_vmem=6G
+#$ -l mem_free=60G
+#$ -l h_vmem=60G
 #$ -l h_rt=24:00:00
 #$ -cwd
 #$ -j y
@@ -8,4 +8,6 @@
 #$ -t 1-1000
 
 mkdir -p results
-Rscript analyzeParal.R $SGE_TASK_ID 1000 270 365 4000 30 15 100 1000
+if [ ! -f "/results/run-$SGE_TASK_ID" ]; then
+  Rscript analyzeParal.R $SGE_TASK_ID 1000 180 365 4000 30 15 100 1000
+fi
