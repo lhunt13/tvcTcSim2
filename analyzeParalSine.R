@@ -1,6 +1,7 @@
 # analyze data on cluster
 library(getopt)
 library(data.table)
+library(splines)
 source('parVals.R')
 source('simObs.R')
 source('sine_analyze.R')

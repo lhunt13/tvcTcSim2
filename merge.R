@@ -6,10 +6,22 @@ main <- function(){
   pattern <- args[2]
   output <- args[3]
   
-  merged <- do.call('rbind', 
-                    lapply(list.files(path = folder,
-                                      pattern = pattern, 
-                                      full.names = TRUE), readRDS))
+  files <- list.files(path = folder,
+                      pattern = pattern, 
+                      full.names = TRUE)
+  
+  numfiles <- length(files)
+
+  merged <- numeric(0)
+  for(i in 1:numfiles){
+    if(file.size(files[i]) > 1){merged[i] <- readRDS(files[i])}
+    else{merged[i] <- NA}
+  }
+  
+  #merged <- do.call('rbind', 
+  #                  lapply(list.files(path = folder,
+  #                                    pattern = pattern, 
+  #                                    full.names = TRUE), readRDS))
   
   saveRDS(merged,paste0(folder,output))
   
