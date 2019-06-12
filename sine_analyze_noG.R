@@ -49,9 +49,9 @@ analyze_noG <- function(DATA,BAND,NUMSIM,DAYSUPP,PRICE,FOLLOWUP){
   g_spl_star <- predict(g_spl,u_star)
   
   # fit models
-  b_mods <- fit_models_noG(DAT = DATA[U < u_star])
+  b_mods <- fit_models_noG(DAT = DATA[U < u_star], SPL = b_spl)
   
-  g_mods <- fit_models_noG(DAT = DATA[U >= u_star])
+  g_mods <- fit_models_noG(DAT = DATA[U >= u_star], SPL = g_spl)
   
   # perform g computation
   bsln <- DATA[day==1][sample(.N, NUMSIM, replace=TRUE,
