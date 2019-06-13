@@ -12,10 +12,10 @@ main <- function(){
   
   numfiles <- length(files)
 
-  merged <- numeric(0)
+  merged <- matrix(NA,nrow=numfiles, ncol = 12)
   for(i in 1:numfiles){
-    if(file.size(files[i]) > 1){merged[i] <- readRDS(files[i])}
-    else{merged[i] <- NA}
+    if(file.size(files[i]) > 1){merged[,i] <- readRDS(files[i])}
+    else{merged[,i] <- rep(NA,12)}
   }
   
   #merged <- do.call('rbind', 

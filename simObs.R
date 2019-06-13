@@ -54,7 +54,7 @@ simS <- function(V,cc,L,U,t,era){
 }
 
 simS.sine <- function(V,cc,L,U,t,era){
-  vars <- c(1,V=="none",V=="other",cc,L,sin(U),t,
+  vars <- c(1,V=="none",V=="other",cc,L,sin(U/1336),t,
             era*c(1,V=="none",V=="other",cc,L,0,t))
   return(rbinom(1,1,prob = expit(vars %*% s.sine)))
 }
